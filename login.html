@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Entrar - Dashboard Financeiro</title>
+  <link rel="stylesheet" href="css login.css" />
+</head>
+<body>
+  <main class="container-login">
+    <form class="form-login" action="#" method="post">
+      <div class="icone-cadeado"></div>
+
+      <section class="cabecalho-login">
+        <h1>Entrar</h1>
+        <p>Digite seu e-mail e senha para acessar o Dashboard</p>
+      </section>
+
+      <section class="campo">
+        <label for="email">E-mail</label>
+        <input id="email" name="email" type="email" placeholder="seuemail@gmail.com" required />
+      </section>
+
+      <section class="campo">
+        <label for="senha">Senha</label>
+        <input id="senha" name="senha" type="password" placeholder="Digite sua senha" required minlength="6" />
+      </section>
+
+      <button type="submit" class="btn-entrar">Entrar</button>
+
+      <p class="link-area">Não tem conta? <a href="cadastro.html">Criar conta</a></p>
+      <p class="seguro">Seus dados estão seguros e protegidos</p>
+    </form>
+  </main>
+  <script src="login.js"></script>
+</body>
+</html>

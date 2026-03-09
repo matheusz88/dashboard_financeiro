@@ -1,0 +1,189 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  }
+  
+  :root{
+    --bg1: #eef2ff;
+    --bg2: #f8fafc;
+  
+    --text: #0f172a;
+    --muted: #64748b;
+    --border: #e2e8f0;
+  
+    --p1: #3b5bff;
+    --p2: #7c3aed;
+    --shadow: 0 22px 65px rgba(15, 23, 42, 0.15);
+  
+    --radius: 18px;
+  }
+  
+  body{
+    min-height: 100vh;
+    background: linear-gradient(135deg, var(--bg1), var(--bg2));
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--text);
+  }
+  
+  main{
+    width: 100%;
+    padding: 42px 18px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 18px;
+  }
+  
+  form{
+    width: 100%;
+    max-width: 460px;
+    background: #fff;
+    border-radius: var(--radius);
+    padding: 58px 38px 28px;
+    box-shadow: var(--shadow);
+    border: 1px solid rgba(226,232,240,0.75);
+    position: relative;
+  }
+
+  .icone-cadeado{
+    width: 58px;
+    height: 58px;
+    border-radius: 16px;
+    position: absolute;
+    top: -29px;
+    left: 50%;
+    transform: translateX(-50%);
+  
+    background: linear-gradient(135deg, var(--p1), var(--p2));
+    box-shadow: 0 18px 35px rgba(124, 58, 237, 0.28);
+  
+    display: grid;
+    place-items: center;
+  }
+
+  .icone-cadeado::before{
+    content: "🔒";
+    font-size: 24px;
+    filter: grayscale(1) brightness(2);
+  }
+
+  .cadastro h1{
+    text-align: center;
+    font-size: 30px;
+    font-weight: 900;
+    letter-spacing: -0.3px;
+    margin-bottom: 8px;
+  }
+  
+  .cadastro h2{
+    text-align: center;
+    color: var(--muted);
+    font-size: 14px;
+    margin-bottom: 26px;
+  }
+
+  section{
+    margin-bottom: 16px;
+  }
+  
+  label{
+    display: block;
+    font-size: 13px;
+    font-weight: 700;
+    color: #111827;
+    margin-bottom: 8px;
+  }
+
+  input{
+    width: 100%;
+    height: 46px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    outline: none;
+    font-size: 14px;
+
+    padding: 0 14px 0 44px;
+  
+    transition: 0.2s;
+    background-color: #fff;
+    background-repeat: no-repeat;
+    background-position: 14px center;
+    background-size: 18px 18px;
+  }
+  
+  input::placeholder{ color: #94a3b8; }
+  
+  input:focus{
+    border-color: rgba(124,58,237,0.55);
+    box-shadow: 0 0 0 4px rgba(124,58,237,0.14);
+  }
+
+  #nome-cadastro{
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 21a8 8 0 0 0-16 0'/%3E%3Ccircle cx='12' cy='7' r='4'/%3E%3C/svg%3E");
+  }
+  
+  #email-cadastro{
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='5' width='18' height='14' rx='2'/%3E%3Cpath d='m3 7 9 6 9-6'/%3E%3C/svg%3E");
+  }
+  
+  #senha-cadastro{
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='11' width='18' height='11' rx='2'/%3E%3Cpath d='M7 11V7a5 5 0 0 1 10 0v4'/%3E%3C/svg%3E");
+  }
+
+  button{
+    width: 100%;
+    height: 50px;
+    border: none;
+    border-radius: 14px;
+    margin-top: 10px;
+    cursor: pointer;
+  
+    color: #fff;
+    font-weight: 800;
+    font-size: 15px;
+  
+    background: linear-gradient(90deg, var(--p1), var(--p2));
+    box-shadow: 0 18px 35px rgba(59, 91, 255, 0.20);
+    transition: 0.2s;
+  }
+  
+  button:hover{
+    transform: translateY(-1px);
+    filter: brightness(1.04);
+  }
+  button:active{
+    transform: scale(0.98);
+  }
+
+  p{
+    margin-top: 14px;
+    text-align: center;
+    color: var(--muted);
+    font-size: 14px;
+  }
+  
+  p a{
+    color: #2563eb;
+    font-weight: 800;
+    text-decoration: none;
+  }
+  p a:hover{ text-decoration: underline; }
+  
+  .aviso{
+    width: 100%;
+    max-width: 460px;
+    text-align: center;
+    color: #94a3b8;
+    font-size: 13px;
+  }
+
+  @media (max-width: 480px){
+    form{
+      padding: 54px 22px 24px;
+    }
+  }
