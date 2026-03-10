@@ -37,24 +37,31 @@ const ctx = canvas.getContext("2d");
 // ====== HELPERS ======
 const brl = new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" });
 
-function hojeISO() {
+function hojeISO() { //Pega a data de Hoje
   const d = new Date();
-  return new Date(d.getFullYear(), d.getMonth(), d.getDate()).toISOString();
+  return new Date(d.getFullYear(), d.getMonth(), d.getDate(), d.getHours(), d.getMinutes(), d.getSeconds()).toISOString(); //.toISOString() converte para o padrão ISO / d.getFullYear(), d.getMonth(), d.getDate() pega dia, mês e ano de hoje
 }
 
-function formatarDataBR(iso) {
+function formatarDataBR(iso) { // formata a data para Brasileira
   const d = new Date(iso);
   const dd = String(d.getDate()).padStart(2, "0");
-  const mm = String(d.getMonth() + 1).padStart(2, "0");
+  const mt = String(d.getMonth() + 1).padStart(2, "0");
   const yyyy = d.getFullYear();
-  return `${dd}/${mm}/${yyyy}`;
+  const hh = d.getHours()  > 9 ? d.getHours() : d.getHours;
+  const mm = d.getMinutes() > 9 ? d.getMinutes() : "0" + d.getMinutes();
+  return `${dd}/${mt}/${yyyy} - ${hh}:${mm}`;
 }
 
 function monthKey(iso) {
-  const d = new Date(iso);
-  const y = d.getFullYear();
-  const m = String(d.getMonth() + 1).padStart(2, "0");
-  return `${y}-${m}`; // YYYY-MM
+  function dayKey(iso) {
+    const d = new Date(iso);
+    const y = d.getFullYear();
+    const m = String(d.getMonth() + 1).padStart(2, "0");
+    const day = String(d.getDate()).padStart(2, "0");
+    const h = String(d.getHours()).padStart(2, "0");
+    const min = String(d.getMinutes()).padStart(2, "0");
+    return `${y}-${m}-${day} - ${h}:${min}`; // YYYY-MM-DD
+  }
 }
 
 function monthLabel(key) {
