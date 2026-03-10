@@ -1,11 +1,9 @@
-// dashboard.js
 
-// ====== CONFIG ======
 const KEY_TRANSACOES = "transacoes";
-const KEY_SESSAO = "usuarioLogado"; // do login que você já fez
-const LOGIN_REDIRECT = "login.html"; // ou "index.html" se preferir
+const KEY_SESSAO = "usuarioLogado"; 
+const LOGIN_REDIRECT = "login.html";
 
-// ====== ELEMENTOS ======
+
 const elReceita = document.getElementById("cardReceita");
 const elDespesa = document.getElementById("cardDespesa");
 const elLucro = document.getElementById("cardLucro");
@@ -60,14 +58,14 @@ function monthKey(iso) {
 }
 
 function monthLabel(key) {
-  // key: YYYY-MM
+ 
   const [y, m] = key.split("-");
   const map = ["Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Out","Nov","Dez"];
   return `${map[Number(m) - 1]}/${y.slice(2)}`;
 }
 
 function parseValorNumero(value) {
-  // aceita "1200.50" ou "1200,50"
+ 
   const s = String(value).trim().replace(".", "").replace(",", ".");
   const n = Number(s);
   return Number.isFinite(n) ? n : NaN;
@@ -93,24 +91,24 @@ function gerarId() {
 }
 
 function sinalEValor(t) {
-  // t.tipo: entrada/saida, t.valor: number (sempre positivo)
+ 
   const sign = t.tipo === "entrada" ? "+" : "-";
   const classes = t.tipo === "entrada" ? "money ok" : "money bad";
   const valor = `${sign}${brl.format(t.valor)}`;
   return { valor, classes };
 }
 
-// ====== SESSÃO (opcional, mas recomendado) ======
+
 function checarSessao() {
-  // Se você não quiser bloquear o dashboard, comente essa função e a chamada.
+
   const sessao = localStorage.getItem(KEY_SESSAO);
   if (!sessao) {
-    // sem sessão, volta pro login
+
     window.location.href = LOGIN_REDIRECT;
   }
 }
 
-// ====== CÁLCULOS ======
+
 function somatorios(transacoes) {
   let receita = 0;
   let despesa = 0;
@@ -121,13 +119,13 @@ function somatorios(transacoes) {
   }
 
   const lucro = receita - despesa;
-  const saldo = lucro; // começa em 0 e acumula pelo histórico (saldo = soma entradas - soma saídas)
+  const saldo = lucro; 
 
   return { receita, despesa, lucro, saldo };
 }
 
 function porMes(transacoes) {
-  // retorna { mesesOrdenados: [...], receitaPorMes: [...], despesaPorMes: [...] }
+
   const map = new Map();
 
   for (const t of transacoes) {
@@ -147,7 +145,7 @@ function porMes(transacoes) {
 }
 
 function compararMesAtualAnterior(transacoes) {
-  // percentuais simples vs mês anterior (base: total do mês anterior)
+  
   const hoje = new Date();
   const mesAtual = `${hoje.getFullYear()}-${String(hoje.getMonth()+1).padStart(2,"0")}`;
 
@@ -186,7 +184,7 @@ function compararMesAtualAnterior(transacoes) {
   };
 }
 
-// ====== RENDER: CARDS ======
+
 function renderCards(transacoes) {
   const { receita, despesa, lucro, saldo } = somatorios(transacoes);
   elReceita.textContent = brl.format(receita);
@@ -201,14 +199,13 @@ function renderCards(transacoes) {
   elSubLucro.textContent = `${p.lucroPct >= 0 ? "+" : ""}${p.lucroPct.toFixed(1)}% vs mês anterior`;
   elSubSaldo.textContent = `${p.saldoPct >= 0 ? "+" : ""}${p.saldoPct.toFixed(1)}% vs mês anterior`;
 
-  // cores coerentes: despesa pct positivo não é "bom", mas é o protótipo (verde/vermelho). Vamos manter simples:
   elSubReceita.className = "card-sub " + (p.receitaPct >= 0 ? "ok" : "bad");
   elSubDespesa.className = "card-sub " + (p.despesaPct <= 0 ? "ok" : "bad");
   elSubLucro.className = "card-sub " + (p.lucroPct >= 0 ? "ok" : "bad");
   elSubSaldo.className = "card-sub " + (p.saldoPct >= 0 ? "ok" : "bad");
 }
 
-// ====== RENDER: TABELAS (RECENTES + TODAS) ======
+
 function criarLinhaTransacao(t, onDelete, onEdit) {
   const tr = document.createElement("tr");
 
@@ -243,7 +240,7 @@ function criarLinhaTransacao(t, onDelete, onEdit) {
   btnDel.addEventListener("click", () => onDelete(t.id));
   tdAcoes.appendChild(btnDel);
 
-  // Inline edit
+
   tdDesc.addEventListener("click", () => iniciarEdicaoTexto(tdDesc, t, "descricao", onEdit));
   badge.addEventListener("click", () => iniciarEdicaoTexto(badge, t, "categoria", onEdit, true));
 
@@ -257,7 +254,7 @@ function criarLinhaTransacao(t, onDelete, onEdit) {
 }
 
 function iniciarEdicaoTexto(el, t, campo, onEdit, isBadge = false) {
-  // evita abrir duas edições
+
   if (el.dataset.editing === "1") return;
   el.dataset.editing = "1";
 
@@ -284,14 +281,14 @@ function iniciarEdicaoTexto(el, t, campo, onEdit, isBadge = false) {
     el.dataset.editing = "0";
 
     if (!novo) {
-      // volta sem salvar
+
       el.innerHTML = original;
       return;
     }
 
     onEdit(t.id, campo, novo);
 
-    // re-render do texto
+   
     if (isBadge) {
       el.textContent = novo;
       el.className = "badge editable";
@@ -346,7 +343,7 @@ function renderTabelaTodas(transacoes) {
   }
 }
 
-// ====== GRÁFICO (CANVAS, SEM BIBLIOTECA) ======
+
 function limparCanvas() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 }
@@ -360,39 +357,38 @@ function desenharGrafico(transacoes) {
   const innerW = w - padding*2;
   const innerH = h - padding*2;
 
-  // box
+  
   ctx.beginPath();
   ctx.rect(0, 0, w, h);
   ctx.fillStyle = "#ffffff";
   ctx.fill();
 
-  // dados por mês
+
   const { mesesOrdenados, receitaPorMes, despesaPorMes } = porMes(transacoes);
 
-  // se não tiver dados, desenha eixo e 0
+
   const meses = mesesOrdenados.length ? mesesOrdenados : [];
   const labels = meses.map(monthLabel);
 
   const maxVal = Math.max(0, ...receitaPorMes, ...despesaPorMes);
   const top = maxVal === 0 ? 1 : maxVal * 1.15;
 
-  // eixos
+
   ctx.strokeStyle = "#cbd5e1";
   ctx.lineWidth = 1;
 
-  // Y axis
+
   ctx.beginPath();
   ctx.moveTo(padding, padding);
   ctx.lineTo(padding, h - padding);
   ctx.stroke();
 
-  // X axis
+  
   ctx.beginPath();
   ctx.moveTo(padding, h - padding);
   ctx.lineTo(w - padding, h - padding);
   ctx.stroke();
 
-  // grade + labels Y
   ctx.fillStyle = "#64748b";
   ctx.font = "12px system-ui";
 
@@ -411,7 +407,7 @@ function desenharGrafico(transacoes) {
     ctx.fillText(brl.format(val), 8, y + 4);
   }
 
-  // se não tem pontos, escreve "Sem dados"
+
   if (mesesOrdenados.length === 0) {
     ctx.fillStyle = "#94a3b8";
     ctx.font = "14px system-ui";
@@ -419,7 +415,6 @@ function desenharGrafico(transacoes) {
     return;
   }
 
-  // X labels
   ctx.fillStyle = "#64748b";
   ctx.font = "12px system-ui";
 
@@ -431,11 +426,10 @@ function desenharGrafico(transacoes) {
     ctx.fillText(labels[i], x - 12, h - padding + 22);
   }
 
-  // função de escala
+
   const xOf = (i) => padding + stepX*i;
   const yOf = (v) => padding + innerH * (1 - (v / top));
 
-  // linhas (Receita = verde, Despesa = vermelho) — sem depender de CSS
   function drawLine(vals, strokeStyle){
     ctx.strokeStyle = strokeStyle;
     ctx.lineWidth = 2;
@@ -449,7 +443,7 @@ function desenharGrafico(transacoes) {
     }
     ctx.stroke();
 
-    // pontos
+
     for (let i=0; i<vals.length; i++){
       const x = xOf(i);
       const y = yOf(vals[i]);
@@ -464,17 +458,17 @@ function desenharGrafico(transacoes) {
   drawLine(despesaPorMes, "#ef4444");
 }
 
-// ====== CRUD ======
+
 let transacoes = [];
 
 function adicionarTransacao({ tipo, descricao, categoria, valor }) {
   const t = {
     id: gerarId(),
-    tipo, // "entrada" | "saida"
+    tipo, 
     descricao,
     categoria,
-    valor, // sempre positivo
-    dataISO: hojeISO(), // automático
+    valor, 
+    dataISO: hojeISO(), 
   };
   transacoes.push(t);
   salvarTransacoes(transacoes);
@@ -495,10 +489,10 @@ function editarTransacao(id, campo, valorNovo) {
   if (campo === "categoria") transacoes[idx].categoria = valorNovo;
 
   salvarTransacoes(transacoes);
-  renderTudo(false); // evita fechar modal
+  renderTudo(false);
 }
 
-// ====== MODAL ======
+
 function abrirModal() {
   modalOverlay.classList.remove("hidden");
   renderTabelaTodas(transacoes);
@@ -508,7 +502,7 @@ function fecharModal() {
   modalOverlay.classList.add("hidden");
 }
 
-// ====== RENDER GERAL ======
+
 function renderTudo(closeModal = true) {
   renderCards(transacoes);
   renderTabelaRecentes(transacoes);
@@ -519,11 +513,11 @@ function renderTudo(closeModal = true) {
   }
 
   if (closeModal) {
-    // não fecha sozinho, só deixa atualizado
+  
   }
 }
 
-// ====== EVENTOS ======
+
 form.addEventListener("submit", (e) => {
   e.preventDefault();
 
@@ -560,12 +554,12 @@ modalOverlay.addEventListener("click", (e) => {
 });
 
 btnSair.addEventListener("click", () => {
-  // limpa sessão, mas mantém dados
+
   localStorage.removeItem(KEY_SESSAO);
   window.location.href = LOGIN_REDIRECT;
 });
 
-// ====== INIT ======
-checarSessao(); // comente se não quiser exigir login
+
+checarSessao(); 
 transacoes = lerTransacoes();
 renderTudo();
