@@ -1,14 +1,52 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Entrar - Dashboard Financeiro</title>
-  <link rel="stylesheet" href="css login.css" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Entrar - Financial Mirror</title>
+
+<link rel="stylesheet" href="css login.css">
+
 </head>
+
 <body>
+
+<div class="layout-login">
+
+  <!-- LADO ESCURO TECNOLÓGICO COM GRÁFICOS -->
+  <div class="lado-empresa">
+
+    <svg class="grafico-bg" viewBox="0 0 600 300">
+
+      <!-- gráfico verde (crescimento) -->
+      <polyline
+        class="linha-verde"
+        points="0,200 80,160 150,180 230,120 300,140 380,90 460,130 600,60"
+        fill="none"
+        stroke="#22c55e"
+        stroke-width="3"/>
+
+      <!-- gráfico vermelho (queda) -->
+      <polyline
+        class="linha-vermelha"
+        points="0,120 90,140 180,110 250,160 330,140 410,190 500,170 600,210"
+        fill="none"
+        stroke="#ef4444"
+        stroke-width="3"/>
+
+    </svg>
+
+    <h1>Financial Mirror</h1>
+    <p>Gerencie suas finanças com inteligência e clareza.</p>
+
+  </div>
+
+  <!-- LADO LOGIN DARK TECNOLÓGICO -->
   <main class="container-login">
+
     <form class="form-login" action="#" method="post">
+
       <div class="icone-cadeado"></div>
 
       <section class="cabecalho-login">
@@ -18,20 +56,26 @@
 
       <section class="campo">
         <label for="email">E-mail</label>
-        <input id="email" name="email" type="email" placeholder="seuemail@gmail.com" required />
+        <input id="email" name="email" type="email" placeholder="seuemail@gmail.com" required>
       </section>
 
       <section class="campo">
         <label for="senha">Senha</label>
-        <input id="senha" name="senha" type="password" placeholder="Digite sua senha" required minlength="6" />
+        <input id="senha" name="senha" type="password" placeholder="Digite sua senha" required minlength="6">
       </section>
 
       <button type="submit" class="btn-entrar">Entrar</button>
 
       <p class="link-area">Não tem conta? <a href="cadastro.html">Criar conta</a></p>
       <p class="seguro">Seus dados estão seguros e protegidos</p>
+
     </form>
+
   </main>
-  <script src="login.js"></script>
+
+</div>
+
+<script src="login.js"></script>
+
 </body>
 </html>
