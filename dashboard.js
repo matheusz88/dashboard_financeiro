@@ -1,142 +1,141 @@
+// ====== CHAVES DO LOCALSTORAGE ======
+const KEY_TRANSACOES = "transacoes"; // onde salva as transações
+const KEY_SESSAO = "usuarioLogado"; // guarda o usuário logado
+const LOGIN_REDIRECT = "login.html"; // página de login
 
-const KEY_TRANSACOES = "transacoes";
-const KEY_SESSAO = "usuarioLogado"; 
-const LOGIN_REDIRECT = "login.html";
-
-
+// ====== ELEMENTOS DOS CARDS ======
 const elReceita = document.getElementById("cardReceita");
 const elDespesa = document.getElementById("cardDespesa");
 const elLucro = document.getElementById("cardLucro");
 const elSaldo = document.getElementById("cardSaldo");
 
+// Subtítulos (percentual comparado ao mês anterior)
 const elSubReceita = document.getElementById("subReceita");
 const elSubDespesa = document.getElementById("subDespesa");
 const elSubLucro = document.getElementById("subLucro");
 const elSubSaldo = document.getElementById("subSaldo");
 
+// ====== FORMULÁRIO ======
 const form = document.getElementById("formTransacao");
 const inputTipo = document.getElementById("tipo");
 const inputDesc = document.getElementById("descricao");
 const inputCat = document.getElementById("categoria");
 const inputValor = document.getElementById("valor");
 
+// ====== TABELAS ======
 const tbodyRecentes = document.getElementById("tbodyRecentes");
 const emptyRecentes = document.getElementById("emptyRecentes");
 
+// ====== BOTÕES ======
 const btnSair = document.getElementById("btnSair");
 const btnVerTodas = document.getElementById("btnVerTodas");
 
+// ====== MODAL ======
 const modalOverlay = document.getElementById("modalOverlay");
 const btnFecharModal = document.getElementById("btnFecharModal");
 const tbodyTodas = document.getElementById("tbodyTodas");
 const emptyTodas = document.getElementById("emptyTodas");
 
+// ====== CANVAS (GRÁFICO) ======
 const canvas = document.getElementById("grafico");
 const ctx = canvas.getContext("2d");
 
-// ====== HELPERS ======
+// ====== FORMATADOR DE MOEDA ======
 const brl = new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" });
 
-function hojeISO() { //Pega a data de Hoje
+
+// ====== FUNÇÕES AUXILIARES ======
+
+// Retorna data de hoje em formato ISO
+function hojeISO() {
   const d = new Date();
-  return new Date(d.getFullYear(), d.getMonth(), d.getDate(), d.getHours(), d.getMinutes(), d.getSeconds()).toISOString(); //.toISOString() converte para o padrão ISO / d.getFullYear(), d.getMonth(), d.getDate() pega dia, mês e ano de hoje
+  return new Date(d.getFullYear(), d.getMonth(), d.getDate()).toISOString();
 }
 
-function formatarDataBR(iso) { // formata a data para Brasileira
+// Formata data para padrão brasileiro
+function formatarDataBR(iso) {
   const d = new Date(iso);
-  const dd = String(d.getDate()).padStart(2, "0");
-  const mt = String(d.getMonth() + 1).padStart(2, "0");
-  const yyyy = d.getFullYear();
-  const hh = d.getHours()  > 9 ? d.getHours() : d.getHours;
-  const mm = d.getMinutes() > 9 ? d.getMinutes() : "0" + d.getMinutes();
-  return `${dd}/${mt}/${yyyy} - ${hh}:${mm}`;
+  return `${String(d.getDate()).padStart(2, "0")}/${String(d.getMonth()+1).padStart(2,"0")}/${d.getFullYear()} ${String(d.getHours()).padStart(2, "0")}:${String(d.getMinutes()).padStart(2, "0")}`;
 }
 
-function monthKey(iso) {
-  function dayKey(iso) {
-    const d = new Date(iso);
-    const y = d.getFullYear();
-    const m = String(d.getMonth() + 1).padStart(2, "0");
-    const day = String(d.getDate()).padStart(2, "0");
-    const h = String(d.getHours()).padStart(2, "0");
-    const min = String(d.getMinutes()).padStart(2, "0");
-    return `${y}-${m}-${day} - ${h}:${min}`; // YYYY-MM-DD
-  }
+// Retorna chave do minuto (HH:MM)
+function minutosKey(iso) {
+  const d = new Date(iso);
+  return `${String(d.getHours()).padStart(2, "0")}:${String(d.getMinutes()).padStart(2, "0")}`;
 }
 
-function monthLabel(key) {
- 
-  const [y, m] = key.split("-");
-  const map = ["Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Out","Nov","Dez"];
-  return `${map[Number(m) - 1]}/${y.slice(2)}`;
-}
+// Retorna chave do mês (YYYY-MM)
+//function monthKey(iso) {
+//  const d = new Date(iso);
+//  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}`;
+//}
 
+//// Nome do mês (ex: Mar/26)
+//function monthLabel(key) {
+//  const [y, m] = key.split("-");
+//  const map = ["Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Out","Nov","Dez"];
+//  return `${map[Number(m)-1]}/${y.slice(2)}`;
+//}
+
+// Converte valor digitado para número
 function parseValorNumero(value) {
- 
   const s = String(value).trim().replace(".", "").replace(",", ".");
   const n = Number(s);
   return Number.isFinite(n) ? n : NaN;
 }
 
+// Lê transações do localStorage
 function lerTransacoes() {
   const raw = localStorage.getItem(KEY_TRANSACOES);
-  if (!raw) return [];
-  try {
-    const arr = JSON.parse(raw);
-    return Array.isArray(arr) ? arr : [];
-  } catch {
-    return [];
-  }
+  return raw ? JSON.parse(raw) : [];
 }
 
+// Salva transações
 function salvarTransacoes(lista) {
   localStorage.setItem(KEY_TRANSACOES, JSON.stringify(lista));
 }
 
+// Gera ID único
 function gerarId() {
-  return crypto?.randomUUID ? crypto.randomUUID() : String(Date.now()) + String(Math.random()).slice(2);
+  return crypto?.randomUUID ? crypto.randomUUID() : Date.now() + Math.random();
 }
 
+// Define sinal (+ ou -) e cor
 function sinalEValor(t) {
- 
   const sign = t.tipo === "entrada" ? "+" : "-";
   const classes = t.tipo === "entrada" ? "money ok" : "money bad";
-  const valor = `${sign}${brl.format(t.valor)}`;
-  return { valor, classes };
+  return { valor: `${sign}${brl.format(t.valor)}`, classes };
 }
 
-
+// ====== SESSÃO ======
 function checarSessao() {
-
-  const sessao = localStorage.getItem(KEY_SESSAO);
-  if (!sessao) {
-
+  if (!localStorage.getItem(KEY_SESSAO)) {
     window.location.href = LOGIN_REDIRECT;
   }
 }
 
-
+// ====== CÁLCULOS ======
 function somatorios(transacoes) {
-  let receita = 0;
-  let despesa = 0;
+  let receita = 0, despesa = 0;
 
   for (const t of transacoes) {
     if (t.tipo === "entrada") receita += t.valor;
     else despesa += t.valor;
   }
 
-  const lucro = receita - despesa;
-  const saldo = lucro; 
-
-  return { receita, despesa, lucro, saldo };
+  return {
+    receita,
+    despesa,
+    lucro: receita - despesa,
+    saldo: receita - despesa
+  };
 }
 
-function porMes(transacoes) {
-
+function porMinuto(transacoes) {
   const map = new Map();
 
   for (const t of transacoes) {
-    const key = monthKey(t.dataISO);
+    const key = minutosKey(t.dataISO);
     if (!map.has(key)) map.set(key, { receita: 0, despesa: 0 });
 
     const item = map.get(key);
@@ -144,429 +143,213 @@ function porMes(transacoes) {
     else item.despesa += t.valor;
   }
 
-  const mesesOrdenados = Array.from(map.keys()).sort();
-  const receitaPorMes = mesesOrdenados.map(k => map.get(k).receita);
-  const despesaPorMes = mesesOrdenados.map(k => map.get(k).despesa);
+  const minutos = Array.from(map.keys()).sort((a, b) => {
+    return a.localeCompare(b);
+  });
 
-  return { mesesOrdenados, receitaPorMes, despesaPorMes };
+  return {
+  minutosOrdenados: minutos,
+  receitaPorMinutos: minutos.map(k => map.get(k).receita),
+  despesaPorMinutos: minutos.map(k => map.get(k).despesa)
+};
 }
+// ====== AGRUPAMENTO POR MÊS (GRÁFICO) ======çççççççççççççççççççççççççççççççççççççççççççççççççççççççççç
+//function porMes(transacoes) {
+//  const map = new Map();
+//
+//  for (const t of transacoes) {
+//    const key = monthKey(t.dataISO);
+//    if (!map.has(key)) map.set(key, { receita: 0, despesa: 0 });
+//
+//    const item = map.get(key);
+//    if (t.tipo === "entrada") item.receita += t.valor;
+//    else item.despesa += t.valor;
+//  }
+//
+//  const meses = Array.from(map.keys()).sort();
+//
+//  return {
+//    mesesOrdenados: meses,
+//    receitaPorMes: meses.map(k => map.get(k).receita),
+//    despesaPorMes: meses.map(k => map.get(k).despesa)
+//  };
+//}
 
-function compararMesAtualAnterior(transacoes) {
-  
-  const hoje = new Date();
-  const mesAtual = `${hoje.getFullYear()}-${String(hoje.getMonth()+1).padStart(2,"0")}`;
+function compararMinutosAtualAnterior(transacoes) {
+  const agora = new Date();
 
-  const dAnterior = new Date(hoje.getFullYear(), hoje.getMonth()-1, 1);
-  const mesAnterior = `${dAnterior.getFullYear()}-${String(dAnterior.getMonth()+1).padStart(2,"0")}`;
+  const atual = new Date(agora);
+  const anterior = new Date(agora);
+  anterior.setMinutes(agora.getMinutes() - 1);
 
-  let rAtual=0, dAtual=0, rAnt=0, dAnt=0;
+  const keyAtual = minutosKey(atual.toISOString());
+  const keyAnterior = minutosKey(anterior.toISOString());
+
+  let rAtual = 0, dAtual = 0, rAnt = 0, dAnt = 0;
 
   for (const t of transacoes) {
-    const mk = monthKey(t.dataISO);
-    if (mk === mesAtual) {
-      if (t.tipo === "entrada") rAtual += t.valor;
-      else dAtual += t.valor;
+    const key = minutosKey(t.dataISO);
+
+    if (key === keyAtual) {
+      t.tipo === "entrada" ? rAtual += t.valor : dAtual += t.valor;
     }
-    if (mk === mesAnterior) {
-      if (t.tipo === "entrada") rAnt += t.valor;
-      else dAnt += t.valor;
+
+    if (key === keyAnterior) {
+      t.tipo === "entrada" ? rAnt += t.valor : dAnt += t.valor;
     }
   }
 
-  const lucroAtual = rAtual - dAtual;
-  const lucroAnt = rAnt - dAnt;
-  const saldoAtual = lucroAtual;
-  const saldoAnt = lucroAnt;
-
-  function pct(atual, ant) {
-    if (ant === 0) return 0;
-    return ((atual - ant) / ant) * 100;
+  function pct(a, b) {
+    if (b === 0) return 0;
+    return ((a - b) / b) * 100;
   }
 
   return {
     receitaPct: pct(rAtual, rAnt),
     despesaPct: pct(dAtual, dAnt),
-    lucroPct: pct(lucroAtual, lucroAnt),
-    saldoPct: pct(saldoAtual, saldoAnt),
+    lucroPct: pct(rAtual - dAtual, rAnt - dAnt),
+    saldoPct: pct(rAtual - dAtual, rAnt - dAnt),
   };
 }
 
-
-function renderCards(transacoes) {
-  const { receita, despesa, lucro, saldo } = somatorios(transacoes);
-  elReceita.textContent = brl.format(receita);
-  elDespesa.textContent = brl.format(despesa);
-  elLucro.textContent = brl.format(lucro);
-  elSaldo.textContent = brl.format(saldo);
-
-  const p = compararMesAtualAnterior(transacoes);
-
-  elSubReceita.textContent = `${p.receitaPct >= 0 ? "+" : ""}${p.receitaPct.toFixed(1)}% vs mês anterior`;
-  elSubDespesa.textContent = `${p.despesaPct >= 0 ? "+" : ""}${p.despesaPct.toFixed(1)}% vs mês anterior`;
-  elSubLucro.textContent = `${p.lucroPct >= 0 ? "+" : ""}${p.lucroPct.toFixed(1)}% vs mês anterior`;
-  elSubSaldo.textContent = `${p.saldoPct >= 0 ? "+" : ""}${p.saldoPct.toFixed(1)}% vs mês anterior`;
-
-  elSubReceita.className = "card-sub " + (p.receitaPct >= 0 ? "ok" : "bad");
-  elSubDespesa.className = "card-sub " + (p.despesaPct <= 0 ? "ok" : "bad");
-  elSubLucro.className = "card-sub " + (p.lucroPct >= 0 ? "ok" : "bad");
-  elSubSaldo.className = "card-sub " + (p.saldoPct >= 0 ? "ok" : "bad");
-}
-
-
-function criarLinhaTransacao(t, onDelete, onEdit) {
-  const tr = document.createElement("tr");
-
-  const tdDesc = document.createElement("td");
-  tdDesc.className = "editable";
-  tdDesc.textContent = t.descricao;
-  tdDesc.title = "Clique para editar";
-
-  const tdCat = document.createElement("td");
-  const badge = document.createElement("span");
-  badge.className = "badge editable";
-  badge.textContent = t.categoria;
-  badge.title = "Clique para editar";
-  tdCat.appendChild(badge);
-
-  const tdData = document.createElement("td");
-  tdData.textContent = formatarDataBR(t.dataISO);
-
-  const tdValor = document.createElement("td");
-  tdValor.className = "right";
-  const sv = sinalEValor(t);
-  const spanValor = document.createElement("span");
-  spanValor.className = sv.classes;
-  spanValor.textContent = sv.valor;
-  tdValor.appendChild(spanValor);
-
-  const tdAcoes = document.createElement("td");
-  tdAcoes.className = "right";
-  const btnDel = document.createElement("button");
-  btnDel.className = "action-btn";
-  btnDel.textContent = "Excluir";
-  btnDel.addEventListener("click", () => onDelete(t.id));
-  tdAcoes.appendChild(btnDel);
-
-
-  tdDesc.addEventListener("click", () => iniciarEdicaoTexto(tdDesc, t, "descricao", onEdit));
-  badge.addEventListener("click", () => iniciarEdicaoTexto(badge, t, "categoria", onEdit, true));
-
-  tr.appendChild(tdDesc);
-  tr.appendChild(tdCat);
-  tr.appendChild(tdData);
-  tr.appendChild(tdValor);
-  tr.appendChild(tdAcoes);
-
-  return tr;
-}
-
-function iniciarEdicaoTexto(el, t, campo, onEdit, isBadge = false) {
-
-  if (el.dataset.editing === "1") return;
-  el.dataset.editing = "1";
-
-  const valorAtual = el.textContent;
-  const input = document.createElement("input");
-  input.type = "text";
-  input.value = valorAtual;
-  input.style.height = "34px";
-  input.style.width = "100%";
-  input.style.borderRadius = "10px";
-  input.style.border = "1px solid #e2e8f0";
-  input.style.padding = "0 10px";
-  input.style.fontSize = "13px";
-  input.style.fontWeight = isBadge ? "900" : "700";
-
-  const original = el.innerHTML;
-  el.innerHTML = "";
-  el.appendChild(input);
-  input.focus();
-  input.select();
-
-  function salvar() {
-    const novo = input.value.trim();
-    el.dataset.editing = "0";
-
-    if (!novo) {
-
-      el.innerHTML = original;
-      return;
-    }
-
-    onEdit(t.id, campo, novo);
-
-   
-    if (isBadge) {
-      el.textContent = novo;
-      el.className = "badge editable";
-    } else {
-      el.textContent = novo;
-      el.className = "editable";
-    }
-  }
-
-  input.addEventListener("keydown", (e) => {
-    if (e.key === "Enter") salvar();
-    if (e.key === "Escape") {
-      el.dataset.editing = "0";
-      el.innerHTML = original;
-    }
-  });
-
-  input.addEventListener("blur", salvar);
-}
-
-function renderTabelaRecentes(transacoes) {
-  tbodyRecentes.innerHTML = "";
-
-  const ordenadas = [...transacoes].sort((a,b) => new Date(b.dataISO) - new Date(a.dataISO));
-  const recentes = ordenadas.slice(0, 5);
-
-  emptyRecentes.style.display = recentes.length ? "none" : "block";
-
-  for (const t of recentes) {
-    const tr = criarLinhaTransacao(
-      t,
-      (id) => removerTransacao(id),
-      (id, campo, valor) => editarTransacao(id, campo, valor)
-    );
-    tbodyRecentes.appendChild(tr);
-  }
-}
-
-function renderTabelaTodas(transacoes) {
-  tbodyTodas.innerHTML = "";
-
-  const ordenadas = [...transacoes].sort((a,b) => new Date(b.dataISO) - new Date(a.dataISO));
-  emptyTodas.style.display = ordenadas.length ? "none" : "block";
-
-  for (const t of ordenadas) {
-    const tr = criarLinhaTransacao(
-      t,
-      (id) => removerTransacao(id),
-      (id, campo, valor) => editarTransacao(id, campo, valor)
-    );
-    tbodyTodas.appendChild(tr);
-  }
-}
-
-
-function limparCanvas() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-}
-
-function desenharGrafico(transacoes) {
-  limparCanvas();
-
-  const padding = 46;
-  const w = canvas.width;
-  const h = canvas.height;
-  const innerW = w - padding*2;
-  const innerH = h - padding*2;
-
-  
-  ctx.beginPath();
-  ctx.rect(0, 0, w, h);
-  ctx.fillStyle = "#ffffff";
-  ctx.fill();
-
-
-  const { mesesOrdenados, receitaPorMes, despesaPorMes } = porMes(transacoes);
-
-
-  const meses = mesesOrdenados.length ? mesesOrdenados : [];
-  const labels = meses.map(monthLabel);
-
-  const maxVal = Math.max(0, ...receitaPorMes, ...despesaPorMes);
-  const top = maxVal === 0 ? 1 : maxVal * 1.15;
-
-
-  ctx.strokeStyle = "#cbd5e1";
-  ctx.lineWidth = 1;
-
-
-  ctx.beginPath();
-  ctx.moveTo(padding, padding);
-  ctx.lineTo(padding, h - padding);
-  ctx.stroke();
-
-  
-  ctx.beginPath();
-  ctx.moveTo(padding, h - padding);
-  ctx.lineTo(w - padding, h - padding);
-  ctx.stroke();
-
-  ctx.fillStyle = "#64748b";
-  ctx.font = "12px system-ui";
-
-  const ticks = 4;
-  for (let i=0; i<=ticks; i++){
-    const y = padding + (innerH * (i/ticks));
-    const val = top * (1 - i/ticks);
-
-    ctx.strokeStyle = "rgba(226,232,240,0.9)";
-    ctx.beginPath();
-    ctx.moveTo(padding, y);
-    ctx.lineTo(w - padding, y);
-    ctx.stroke();
-
-    ctx.fillStyle = "#64748b";
-    ctx.fillText(brl.format(val), 8, y + 4);
-  }
-
-
-  if (mesesOrdenados.length === 0) {
-    ctx.fillStyle = "#94a3b8";
-    ctx.font = "14px system-ui";
-    ctx.fillText("Sem dados ainda. Adicione transações para ver o gráfico.", padding, padding + 18);
-    return;
-  }
-
-  ctx.fillStyle = "#64748b";
-  ctx.font = "12px system-ui";
-
-  const n = labels.length;
-  const stepX = n === 1 ? innerW : innerW / (n - 1);
-
-  for (let i=0; i<n; i++){
-    const x = padding + stepX*i;
-    ctx.fillText(labels[i], x - 12, h - padding + 22);
-  }
-
-
-  const xOf = (i) => padding + stepX*i;
-  const yOf = (v) => padding + innerH * (1 - (v / top));
-
-  function drawLine(vals, strokeStyle){
-    ctx.strokeStyle = strokeStyle;
-    ctx.lineWidth = 2;
-
-    ctx.beginPath();
-    for (let i=0; i<vals.length; i++){
-      const x = xOf(i);
-      const y = yOf(vals[i]);
-      if (i === 0) ctx.moveTo(x, y);
-      else ctx.lineTo(x, y);
-    }
-    ctx.stroke();
-
-
-    for (let i=0; i<vals.length; i++){
-      const x = xOf(i);
-      const y = yOf(vals[i]);
-      ctx.fillStyle = strokeStyle;
-      ctx.beginPath();
-      ctx.arc(x, y, 4, 0, Math.PI*2);
-      ctx.fill();
-    }
-  }
-
-  drawLine(receitaPorMes, "#16a34a");
-  drawLine(despesaPorMes, "#ef4444");
-}
-
-
-let transacoes = [];
-
-function adicionarTransacao({ tipo, descricao, categoria, valor }) {
+// ====== COMPARAÇÃO COM MÊS ANTERIOR ======çççççççççççççççççççççççççççççççççççççççççççççççççççççç
+//function compararMesAtualAnterior(transacoes) {
+//  const hoje = new Date();
+//
+//  const mesAtual = `${hoje.getFullYear()}-${String(hoje.getMonth()+1).padStart(2,"0")}`;
+//  const dAnterior = new Date(hoje.getFullYear(), hoje.getMonth()-1, 1);
+//  const mesAnterior = `${dAnterior.getFullYear()}-${String(dAnterior.getMonth()+1).padStart(2,"0")}`;
+//
+//  let rAtual=0, dAtual=0, rAnt=0, dAnt=0;
+//
+//  for (const t of transacoes) {
+//    const mk = monthKey(t.dataISO);
+//
+//    if (mk === mesAtual) {
+//      t.tipo === "entrada" ? rAtual += t.valor : dAtual += t.valor;
+//    }
+//
+//    if (mk === mesAnterior) {
+//      t.tipo === "entrada" ? rAnt += t.valor : dAnt += t.valor;
+//    }
+//  }
+//
+//  function pct(a, b) {
+//    if (b === 0) return 0;
+//    return ((a - b) / b) * 100;
+//  }
+//
+//  return {
+//    receitaPct: pct(rAtual, rAnt),
+//    despesaPct: pct(dAtual, dAnt),
+//    lucroPct: pct(rAtual - dAtual, rAnt - dAnt),
+//    saldoPct: pct(rAtual - dAtual, rAnt - dAnt),
+//  };
+//}
+
+// ====== RENDERIZAÇÃO DOS CARDS ======
+//function renderCards(transacoes) {
+//  const { receita, despesa, lucro, saldo } = somatorios(transacoes);
+//
+//  elReceita.textContent = brl.format(receita);
+//  elDespesa.textContent = brl.format(despesa);
+//  elLucro.textContent = brl.format(lucro);
+//  elSaldo.textContent = brl.format(saldo);
+//
+//  const p = compararMesAtualAnterior(transacoes);
+//
+//  elSubReceita.textContent = `${p.receitaPct.toFixed(1)}% vs mês anterior`;
+//  elSubDespesa.textContent = `${p.despesaPct.toFixed(1)}% vs mês anterior`;
+//  elSubLucro.textContent = `${p.lucroPct.toFixed(1)}% vs mês anterior`;
+//  elSubSaldo.textContent = `${p.saldoPct.toFixed(1)}% vs mês anterior`;
+//}
+
+// ====== CRUD ======
+
+// Adicionar transação
+function adicionarTransacao(dados) {
   const t = {
     id: gerarId(),
-    tipo, 
-    descricao,
-    categoria,
-    valor, 
-    dataISO: hojeISO(), 
+    ...dados,
+    dataISO: hojeISO()
   };
+
   transacoes.push(t);
   salvarTransacoes(transacoes);
   renderTudo();
 }
 
+// Remover
 function removerTransacao(id) {
   transacoes = transacoes.filter(t => t.id !== id);
   salvarTransacoes(transacoes);
   renderTudo();
 }
 
+// Editar
 function editarTransacao(id, campo, valorNovo) {
-  const idx = transacoes.findIndex(t => t.id === id);
-  if (idx === -1) return;
+  const t = transacoes.find(t => t.id === id);
+  if (!t) return;
 
-  if (campo === "descricao") transacoes[idx].descricao = valorNovo;
-  if (campo === "categoria") transacoes[idx].categoria = valorNovo;
-
+  t[campo] = valorNovo;
   salvarTransacoes(transacoes);
   renderTudo(false);
 }
 
-
+// ====== MODAL ======
 function abrirModal() {
   modalOverlay.classList.remove("hidden");
-  renderTabelaTodas(transacoes);
 }
 
 function fecharModal() {
   modalOverlay.classList.add("hidden");
 }
 
-
-function renderTudo(closeModal = true) {
+// ====== RENDER GERAL ======
+function renderTudo() {
   renderCards(transacoes);
-  renderTabelaRecentes(transacoes);
   desenharGrafico(transacoes);
-
-  if (!modalOverlay.classList.contains("hidden")) {
-    renderTabelaTodas(transacoes);
-  }
-
-  if (closeModal) {
-  
-  }
 }
 
+// ====== EVENTOS ======
 
+// Submit do formulário
 form.addEventListener("submit", (e) => {
   e.preventDefault();
 
-  const tipo = inputTipo.value;
-  const descricao = inputDesc.value.trim();
-  const categoria = inputCat.value.trim();
-  const valorNum = parseValorNumero(inputValor.value);
+  const valor = parseValorNumero(inputValor.value);
 
-  if (!descricao || !categoria) {
-    alert("Preencha descrição e categoria.");
+  if (!inputDesc.value || !inputCat.value) {
+    alert("Preencha tudo!");
     return;
   }
-  if (!Number.isFinite(valorNum) || valorNum <= 0) {
-    alert("Informe um valor numérico válido maior que 0.");
+
+  if (!valor || valor <= 0) {
+    alert("Valor inválido!");
     return;
   }
 
   adicionarTransacao({
-    tipo,
-    descricao,
-    categoria,
-    valor: Number(valorNum.toFixed(2)),
+    tipo: inputTipo.value,
+    descricao: inputDesc.value,
+    categoria: inputCat.value,
+    valor
   });
 
   form.reset();
-  inputTipo.value = "entrada";
 });
 
+// Botões
 btnVerTodas.addEventListener("click", abrirModal);
 btnFecharModal.addEventListener("click", fecharModal);
 
-modalOverlay.addEventListener("click", (e) => {
-  if (e.target === modalOverlay) fecharModal();
-});
-
+// Logout
 btnSair.addEventListener("click", () => {
-
   localStorage.removeItem(KEY_SESSAO);
   window.location.href = LOGIN_REDIRECT;
 });
 
-
-checarSessao(); 
+// ====== INICIALIZAÇÃO ======
+checarSessao();
 transacoes = lerTransacoes();
 renderTudo();
