@@ -1,69 +1,86 @@
-const form = document.querySelector("form");
-const inputNome = document.querySelector("#nome-cadastro");
-const inputEmail = document.querySelector("#email-cadastro");
-const inputSenha = document.querySelector("#senha-cadastro");
+function toggleSenha(id, botao){
+  const input = document.getElementById(id);
 
-function pegarUsuarios() {
-  const usuariosJSON = localStorage.getItem("usuarios");
-
-  if (!usuariosJSON) return [];
-
-  return JSON.parse(usuariosJSON);
+  if(input.type === "password"){
+    input.type = "text";
+    if(botao) botao.textContent = "🙈";
+  }else{
+    input.type = "password";
+    if(botao) botao.textContent = "👁️";
+  }
 }
 
-// 3) Função para salvar usuários
-function salvarUsuarios(lista) {
-  localStorage.setItem("usuarios", JSON.stringify(lista));
-}
-
-// 4) Quando clicar em Cadastrar
-form.addEventListener("submit", function (e) {
+document.getElementById("formCadastro").addEventListener("submit", function(e){
   e.preventDefault();
 
-  const nome = inputNome.value.trim();
-  const email = inputEmail.value.trim().toLowerCase();
-  const senha = inputSenha.value;
+  const nome = document.getElementById("nome");
+  const email = document.getElementById("email");
+  const senha = document.getElementById("senha");
+  const confirmar = document.getElementById("confirmar");
+  const erro = document.getElementById("erro");
+  const btn = document.getElementById("btn");
 
-  // Validação básica
-  if (!nome || !email || !senha) {
-    alert("Preencha todos os campos.");
+  erro.textContent = "";
+  [nome, email, senha, confirmar].forEach(campo => {
+    campo.classList.remove("erro-input", "sucesso");
+  });
+
+  if(nome.value.trim().length < 3){
+    erro.textContent = "Digite um nome válido.";
+    nome.classList.add("erro-input");
+    nome.focus();
     return;
   }
 
-  if (senha.length < 6) {
-    alert("A senha deve ter no mínimo 6 caracteres.");
+  if(!email.value.includes("@") || !email.value.includes(".")){
+    erro.textContent = "Digite um e-mail válido.";
+    email.classList.add("erro-input");
+    email.focus();
     return;
   }
 
-  // Pega usuários existentes
-  const usuarios = pegarUsuarios();
-
-  // Verifica se o email já existe
-  const emailExiste = usuarios.find((u) => u.email === email);
-
-  if (emailExiste) {
-    alert("Este e-mail já está cadastrado.");
+  if(senha.value.length < 6){
+    erro.textContent = "A senha deve ter no mínimo 6 caracteres.";
+    senha.classList.add("erro-input");
+    senha.focus();
     return;
   }
 
-  // Cria novo usuário
-  const novoUsuario = {
-    nome: nome,
-    email: email,
-    senha: senha
-  };
+  if(senha.value !== confirmar.value){
+    erro.textContent = "As senhas não coincidem.";
+    confirmar.classList.add("erro-input");
+    confirmar.focus();
+    return;
+  }
 
-  // Adiciona na lista
-  usuarios.push(novoUsuario);
+  let usuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
 
-  // Salva no localStorage
-  salvarUsuarios(usuarios);
+  const usuarioExistente = usuarios.find(usuario => usuario.email === email.value.trim());
 
-  alert("Conta criada com sucesso!");
+  if(usuarioExistente){
+    erro.textContent = "Esse e-mail já está cadastrado.";
+    email.classList.add("erro-input");
+    email.focus();
+    return;
+  }
 
-  // Limpa os campos
-  form.reset();
+  usuarios.push({
+    nome: nome.value.trim(),
+    email: email.value.trim(),
+    senha: senha.value
+  });
 
-  // Redireciona para login
-  window.location.href = "login.html";
+  localStorage.setItem("usuarios", JSON.stringify(usuarios));
+
+  [nome, email, senha, confirmar].forEach(campo => {
+    campo.classList.add("sucesso");
+  });
+
+  btn.classList.add("loading");
+  btn.textContent = "Conta criada!";
+  btn.style.background = "linear-gradient(90deg, #22c55e, #16a34a)";
+
+  setTimeout(() => {
+    window.location.href = "login.html";
+  }, 1000);
 });
