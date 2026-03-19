@@ -8,7 +8,7 @@ const CHAVE_USUARIOS = "usuarios";
 const CHAVE_SESSAO = "usuarioLogado";
 
 // Para onde ir após login:
-const PAGINA_DASHBOARD = "dashboard.html";
+const PAGINA_DASHBOARD = "index.html";
 
 // ============ ELEMENTOS ============
 // Seu HTML tem <form class="form-login"> e inputs #email e #senha
