@@ -1,79 +1,122 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+  <!-- Aqui eu defino a codificação da página para aceitar acentos e caracteres especiais normalmente -->
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+  <!-- Aqui eu deixo o layout responsivo, para o sistema funcionar melhor em celular, tablet e computador -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Aqui eu defino o título da aba do navegador -->
   <title>Dashboard Financeiro</title>
+
+  <!-- Aqui eu puxo o arquivo de estilo da página -->
   <link rel="stylesheet" href="dashboard.css" />
 </head>
-
 <body>
 
+  <!-- Aqui eu crio o topo do sistema -->
   <header class="topbar">
     <div class="brand">
-      <div class="brand-icon">💳</div>
+      <!-- Aqui eu deixo o ícone principal do sistema -->
+      <div class="brand-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="white" viewBox="0 0 16 16">
+          <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6"/>
+          <path d="M14 14s-1-4-6-4-6 4-6 4 1 1 6 1 6-1 6-1"/>
+        </svg>
+      </div>
+
+      <!-- Aqui eu coloco o nome do sistema e a saudação do usuário -->
       <div>
-        <h1>Meu Dashboard</h1>
-        <p>Bem-vindo de volta!</p>
+        <h1>Financial Mirror</h1>
+        <p id="saudacaoUsuario">Bem-vindo de volta!</p>
       </div>
     </div>
 
-    <button id="btnSair" class="btn ghost">
+    <!-- Aqui eu crio o botão de sair da sessão -->
+    <button id="btnSair" class="btn ghost" type="button">
       <span class="btn-icon">↩</span> Sair
     </button>
   </header>
 
+  <!-- Aqui começa o conteúdo principal da página -->
   <main class="container">
 
+    <!-- Aqui eu coloco o título da área principal -->
     <section class="page-title">
       <h2>Resumo Financeiro</h2>
       <p>Acompanhe suas finanças em tempo real</p>
     </section>
 
+    <!-- Aqui eu crio os 4 cards principais do dashboard -->
     <section class="cards">
+
+      <!-- Card de receita -->
       <article class="card">
         <div class="card-head">
           <span class="card-label">Receita Total</span>
-          <span class="chip ok">↗</span>
+          <span class="chip ok">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+              <path fill-rule="evenodd" d="M14 2.5a.5.5 0 0 0-.5-.5h-6a.5.5 0 0 0 0 1h4.793L2.146 13.146a.5.5 0 0 0 .708.708L13 3.707V8.5a.5.5 0 0 0 1 0z"/>
+            </svg>
+          </span>
         </div>
         <div class="card-value" id="cardReceita">R$ 0,00</div>
-        <div class="card-sub ok" id="subReceita">+0,0% vs minuto anterior</div>
+        <div class="card-sub" id="subReceita"></div>
       </article>
 
+      <!-- Card de despesa -->
       <article class="card">
         <div class="card-head">
           <span class="card-label">Despesas Totais</span>
-          <span class="chip bad">↘</span>
+          <span class="chip bad">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+              <path fill-rule="evenodd" d="M14 13.5a.5.5 0 0 1-.5.5h-6a.5.5 0 0 1 0-1h4.793L2.146 2.854a.5.5 0 1 1 .708-.708L13 12.293V7.5a.5.5 0 0 1 1 0z"/>
+            </svg>
+          </span>
         </div>
         <div class="card-value" id="cardDespesa">R$ 0,00</div>
-        <div class="card-sub bad" id="subDespesa">-0,0% vs minuto anterior</div>
+        <div class="card-sub" id="subDespesa"></div>
       </article>
 
+      <!-- Card de lucro -->
       <article class="card">
         <div class="card-head">
           <span class="card-label">Lucro Líquido</span>
-          <span class="chip info">💲</span>
+          <span class="chip info">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+              <path d="M4 10.781c.148 1.667 1.513 2.85 3.591 3.003V15h1.043v-1.216c2.27-.179 3.678-1.438 3.678-3.3 0-1.59-.947-2.51-2.956-3.028l-.722-.187V3.467c1.122.11 1.879.714 2.07 1.616h1.47c-.166-1.6-1.54-2.748-3.54-2.875V1H7.591v1.233c-1.939.23-3.27 1.472-3.27 3.156 0 1.454.966 2.483 2.661 2.917l.61.162v4.031c-1.149-.17-1.94-.8-2.131-1.718z"/>
+            </svg>
+          </span>
         </div>
         <div class="card-value" id="cardLucro">R$ 0,00</div>
-        <div class="card-sub ok" id="subLucro">+0,0% vs minuto anterior</div>
+        <div class="card-sub" id="subLucro"></div>
       </article>
 
+      <!-- Card de saldo -->
       <article class="card">
         <div class="card-head">
           <span class="card-label">Saldo Atual</span>
-          <span class="chip purple">🧾</span>
+          <span class="chip purple">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+              <path d="M1 3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1zm7 8a2 2 0 1 0 0-4 2 2 0 0 0 0 4"/>
+              <path d="M0 5a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1zm3 0a2 2 0 0 1-2 2v4a2 2 0 0 1 2 2h10a2 2 0 0 1 2-2V7a2 2 0 0 1-2-2z"/>
+            </svg>
+          </span>
         </div>
         <div class="card-value" id="cardSaldo">R$ 0,00</div>
-        <div class="card-sub ok" id="subSaldo">+0,0% vs minuto anterior</div>
+        <div class="card-sub" id="subSaldo"></div>
       </article>
     </section>
 
+    <!-- Aqui eu crio a área de cadastro de transações -->
     <section class="panel">
       <div class="panel-head">
         <h3>Adicionar transação</h3>
         <p>Crie entradas (receitas) e saídas (despesas). A data é automática.</p>
       </div>
 
+      <!-- Aqui eu monto o formulário principal -->
       <form id="formTransacao" class="form">
         <div class="field">
           <label for="tipo">Tipo</label>
@@ -95,13 +138,14 @@
 
         <div class="field">
           <label for="valor">Valor (número)</label>
-          <input id="valor" type="real" step="0.01" min="0" placeholder="Ex: 1200.50" required />
+          <input id="valor" type="number" step="0.01" min="0" placeholder="Ex: 1200.50" required />
         </div>
 
         <button class="btn primary" type="submit">Adicionar</button>
       </form>
     </section>
 
+    <!-- Aqui eu crio a área do gráfico -->
     <section class="panel">
       <div class="panel-head">
         <h3>Receita vs Despesa</h3>
@@ -117,14 +161,15 @@
       </div>
     </section>
 
+    <!-- Aqui eu monto a tabela das transações recentes -->
     <section class="panel">
       <div class="panel-head row">
         <div>
           <h3>Transações Recentes</h3>
-          <p>Descrição e Categoria são editáveis (clique para editar).</p>
+          <p>Últimas movimentações cadastradas.</p>
         </div>
 
-        <button id="btnVerTodas" class="link-btn">Ver todas</button>
+        <button id="btnVerTodas" class="link-btn" type="button">Ver todas</button>
       </div>
 
       <div class="table-wrap">
@@ -146,17 +191,17 @@
         </div>
       </div>
     </section>
-
   </main>
 
+  <!-- Aqui eu crio o modal que mostra todas as transações -->
   <div id="modalOverlay" class="modal-overlay hidden">
     <div class="modal">
       <div class="modal-head">
         <div>
           <h3>Todas as transações</h3>
-          <p>Você pode editar e excluir.</p>
+          <p>Você pode visualizar e excluir.</p>
         </div>
-        <button id="btnFecharModal" class="btn ghost">Fechar</button>
+        <button id="btnFecharModal" class="btn ghost" type="button">Fechar</button>
       </div>
 
       <div class="table-wrap">
@@ -180,7 +225,20 @@
     </div>
   </div>
 
+  <!-- Aqui eu crio o modal do saldo inicial -->
+  <div id="modalSaldo" class="modal-saldo">
+    <div class="modal-box">
+      <h2>Saldo Inicial</h2>
+      <p>Antes de começar, informe quanto você tem atualmente.</p>
+      <input type="text" id="inputSaldoInicial" placeholder="Ex: 1000,00">
+      <button id="btnSalvarSaldo" type="button">Salvar</button>
+    </div>
+  </div>
+
+  <!-- Aqui eu importo a biblioteca do gráfico -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- Aqui eu importo o JavaScript principal do sistema -->
   <script src="dashboard.js"></script>
 </body>
 </html>
