@@ -35,6 +35,29 @@
 
     <!-- Aqui eu crio o botão de sair da sessão -->
     <button id="btnSair" class="btn ghost" type="button">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Financial Mirror</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="dashboard.css">
+
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-icon">💳</div>
+      <div>
+        <h1>Meu Dashboard</h1>
+        <p>Bem-vindo de volta!</p>
+      </div>
+    </div>
+
+    <button id="btnSair" class="btn ghost">
       <span class="btn-icon">↩</span> Sair
     </button>
   </header>
@@ -43,6 +66,9 @@
   <main class="container">
 
     <!-- Aqui eu coloco o título da área principal -->
+
+  <main class="container">
+
     <section class="page-title">
       <h2>Resumo Financeiro</h2>
       <p>Acompanhe suas finanças em tempo real</p>
@@ -110,13 +136,55 @@
     </section>
 
     <!-- Aqui eu crio a área de cadastro de transações -->
+
+    <section class="cards">
+      <article class="card">
+        <div class="card-head">
+          <span class="card-label">Receita Total</span>
+          <span class="chip ok">↗</span>
+        </div>
+        <div class="card-value" id="cardReceita">R$ 0,00</div>
+        <div class="card-sub ok" id="subReceita">+0,0% vs mês anterior</div>
+      </article>
+
+      <article class="card">
+        <div class="card-head">
+          <span class="card-label">Despesas Totais</span>
+          <span class="chip bad">↘</span>
+        </div>
+        <div class="card-value" id="cardDespesa">R$ 0,00</div>
+        <div class="card-sub bad" id="subDespesa">-0,0% vs mês anterior</div>
+      </article>
+
+      <article class="card">
+        <div class="card-head">
+          <span class="card-label">Lucro Líquido</span>
+          <span class="chip info">💲</span>
+        </div>
+        <div class="card-value" id="cardLucro">R$ 0,00</div>
+        <div class="card-sub ok" id="subLucro">+0,0% vs mês anterior</div>
+      </article>
+
+      <article class="card">
+        <div class="card-head">
+          <span class="card-label">Saldo Atual</span>
+          <span class="chip purple">🧾</span>
+        </div>
+        <div class="card-value" id="cardSaldo">R$ 0,00</div>
+        <div class="card-sub ok" id="subSaldo">+0,0% vs mês anterior</div>
+      </article>
+    </section>
+
+ 
     <section class="panel">
       <div class="panel-head">
         <h3>Adicionar transação</h3>
         <p>Crie entradas (receitas) e saídas (despesas). A data é automática.</p>
       </div>
 
+
       <!-- Aqui eu monto o formulário principal -->
+
       <form id="formTransacao" class="form">
         <div class="field">
           <label for="tipo">Tipo</label>
@@ -145,11 +213,18 @@
       </form>
     </section>
 
+
     <!-- Aqui eu crio a área do gráfico -->
     <section class="panel">
       <div class="panel-head">
         <h3>Receita vs Despesa</h3>
         <p>Agrupado por minuto</p>
+
+
+    <section class="panel">
+      <div class="panel-head">
+        <h3>Receita vs Despesa</h3>
+        <p>Agrupado por mês</p>
       </div>
 
       <div class="chart-wrap">
@@ -162,6 +237,7 @@
     </section>
 
     <!-- Aqui eu monto a tabela das transações recentes -->
+
     <section class="panel">
       <div class="panel-head row">
         <div>
@@ -170,6 +246,11 @@
         </div>
 
         <button id="btnVerTodas" class="link-btn" type="button">Ver todas</button>
+
+          <p>Descrição e Categoria são editáveis (clique para editar).</p>
+        </div>
+
+        <button id="btnVerTodas" class="link-btn">Ver todas</button>
       </div>
 
       <div class="table-wrap">
@@ -184,6 +265,10 @@
             </tr>
           </thead>
           <tbody id="tbodyRecentes"></tbody>
+
+          <tbody id="tbodyRecentes">
+       
+          </tbody>
         </table>
 
         <div id="emptyRecentes" class="empty">
@@ -195,6 +280,9 @@
 
   <!-- Aqui eu crio o modal que mostra todas as transações -->
   <div id="modalOverlay" class="modal-overlay hidden">
+
+  
+  <div id="modalOverlay" class="modal-overlay hidden" role="dialog" aria-modal="true">
     <div class="modal">
       <div class="modal-head">
         <div>
@@ -202,6 +290,10 @@
           <p>Você pode visualizar e excluir.</p>
         </div>
         <button id="btnFecharModal" class="btn ghost" type="button">Fechar</button>
+
+          <p>Você pode editar Descrição/Categoria e excluir.</p>
+        </div>
+        <button id="btnFecharModal" class="btn ghost">Fechar</button>
       </div>
 
       <div class="table-wrap">
@@ -216,6 +308,10 @@
             </tr>
           </thead>
           <tbody id="tbodyTodas"></tbody>
+
+          <tbody id="tbodyTodas">
+    
+          </tbody>
         </table>
 
         <div id="emptyTodas" class="empty">
@@ -240,5 +336,16 @@
 
   <!-- Aqui eu importo o JavaScript principal do sistema -->
   <script src="dashboard.js"></script>
+</body>
+</html>
+
+
+  <script>
+  const usuarioLogado = JSON.parse(localStorage.getItem("usuarioLogado"));
+
+  if(!usuarioLogado){
+    window.location.href = "login.html";
+  }
+</script>
 </body>
 </html>

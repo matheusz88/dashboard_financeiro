@@ -1,49 +1,85 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-    <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>cadastro - Dashboard Financeiro</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
-    <link rel="stylesheet" href="css cadastro.css" />
-    </head>
-    <body>
-        <main>
-            <form>
-                <div class="icone-cadeado"></div>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cadastro - Financial Mirror</title>
 
-                <section class="cadastro">
-                    <h1>Criar Conta</h1>
-                    <h2>Comece a gerenciar suas finanças</h2>
-                </section>
+  <!-- FONTE INTER -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css login.css">
+</head>
+<body>
 
-                <section class="nome">
-                    <label for="nome-cadastro">Nome completo</label>
-                    <input id="nome-cadastro" type="text" placeholder="João Silva">
-                </section>
+  <div class="layout-login">
 
-              <section class="email">
-                  <label for="email-cadastro">Email</label>
-                 <input id="email-cadastro" type="email" placeholder="seu@email.com">
-              </section>
+    <div class="lado-empresa">
 
-              <section class="senha">
-                  <label for="senha-cadastro">Senha</label>
-                  <input id="senha-cadastro" type="password" placeholder="••••••••">
-              </section>
+      <svg class="grafico-bg" viewBox="0 0 600 300" preserveAspectRatio="none">
 
-              <button type="submit" id="cadastrar">Cadastrar</button>
+        <polyline class="linha-verde"
+          points="0,230 70,190 140,215 215,145 300,175 395,105 490,155 600,95"
+          fill="none" stroke="#22c55e" stroke-width="3"/>
 
-              <p>
-                Já tem conta?
-                <a href="login.html">Entrar</a>
-              </p>
-            </form>
+        <polyline class="linha-vermelha"
+          points="0,170 85,185 160,150 240,210 335,185 430,245 540,220 600,245"
+          fill="none" stroke="#ef4444" stroke-width="3"/>
 
-            <div class="aviso">
-                <p>Seus dados estão seguros e protegidos</p>
-            </div>
-        </main>
-        <script src="cadastro.js"></script>
-    </body>
-</html>
+      </svg>
+
+      <div class="conteudo-empresa">
+        <h1>Financial Mirror</h1>
+        <p>Comece agora e assuma o controle da sua vida financeira.</p>
+      </div>
+
+    </div>
+
+    <main class="container-login">
+
+   <form class="form-login" id="formCadastro">
+
+  <div class="icone-cadeado"></div>
+
+  <section class="cabecalho-login">
+    <h1>Criar Conta</h1>
+    <p>Preencha os dados para começar</p>
+  </section>
+
+  <section class="campo">
+    <label>Nome</label>
+    <input id="nome" type="text" placeholder="Seu nome completo" required>
+  </section>
+
+  <section class="campo">
+    <label>E-mail</label>
+    <input id="email" type="email" placeholder="seuemail@gmail.com" required>
+  </section>
+
+  <section class="campo senha-box">
+    <label>Senha</label>
+    <input id="senha" type="password" required>
+    <span class="toggle-senha" onclick="toggleSenha('senha')">👁️</span>
+  </section>
+
+  <section class="campo senha-box">
+    <label>Confirmar senha</label>
+    <input id="confirmar" type="password" required>
+    <span class="toggle-senha" onclick="toggleSenha('confirmar')">👁️</span>
+  </section>
+
+  <div id="erro" class="erro"></div>
+
+  <button type="submit" class="btn-entrar" id="btn">
+    Criar conta
+  </button>
+
+  <p class="link-area">
+    Já tem conta? <a href="login.html">Entrar</a>
+  </p>
+
+  <p class="seguro">Seus dados estão seguros</p>
+
+</form>
+
+
+<script src="cadastro.js"></script>
