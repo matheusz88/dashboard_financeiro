@@ -1,3 +1,32 @@
+// login.js
+
+// ============ CONFIG ============
+// CHAVE onde o cadastro salva a lista de usuários:
+const CHAVE_USUARIOS = "usuarios";
+
+// CHAVE da sessão (quem está logado):
+const CHAVE_SESSAO = "usuarioLogado";
+
+// Para onde ir após login:
+const PAGINA_DASHBOARD = "index.html";
+
+// ============ ELEMENTOS ============
+// Seu HTML tem <form class="form-login"> e inputs #email e #senha
+const form = document.querySelector(".form-login");
+const inputEmail = document.querySelector("#email");
+const inputSenha = document.querySelector("#senha");
+
+// ============ FUNÇÕES UTILITÁRIAS ============
+function lerJSON(chave, padrao) {
+  const valor = localStorage.getItem(chave);
+  if (!valor) return padrao;
+
+  try {
+    return JSON.parse(valor);
+  } catch (e) {
+    console.error(`Erro ao ler JSON da chave "${chave}"`, e);
+    return padrao;
+
 function toggleSenha(id, botao){
   const input = document.getElementById(id);
 
@@ -7,6 +36,7 @@ function toggleSenha(id, botao){
   }else{
     input.type = "password";
     if(botao) botao.textContent = "👁️";
+
   }
 }
 

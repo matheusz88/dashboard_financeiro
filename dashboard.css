@@ -1,381 +1,638 @@
-:root{
-    --bg1:#eef2ff;
-    --bg2:#f8fafc;
-  
-    --text:#0f172a;
-    --muted:#64748b;
-    --border:#e2e8f0;
-  
-    --white:#ffffff;
-  
-    --purple1:#6d28d9;
-    --purple2:#7c3aed;
-  
-    --green:#16a34a;
-    --red:#ef4444;
-    --blue:#2563eb;
-  
-    --shadow: 0 22px 65px rgba(15, 23, 42, 0.12);
-    --shadow2: 0 10px 25px rgba(15, 23, 42, 0.08);
-  
-    --radius:18px;
+:root {
+  /* Aqui eu concentro as cores e medidas principais do sistema para ficar mais fácil de manter o visual padronizado */
+  --bg-main: #020817;
+  --bg-secondary: #071226;
+  --panel: rgba(15, 23, 42, 0.82);
+  --panel-strong: rgba(20, 30, 52, 0.95);
+
+  --text: #f8fafc;
+  --muted: #94a3b8;
+  --border: rgba(148, 163, 184, 0.14);
+
+  --blue1: #3b82f6;
+  --blue2: #1d4ed8;
+
+  --green: #22c55e;
+  --greenBg: rgba(34, 197, 94, 0.12);
+
+  --red: #ef4444;
+  --redBg: rgba(239, 68, 68, 0.12);
+
+  --purple: #8b5cf6;
+  --purpleBg: rgba(139, 92, 246, 0.12);
+
+  --cyan: #38bdf8;
+  --cyanBg: rgba(56, 189, 248, 0.12);
+
+  --shadow: 0 25px 60px rgba(0, 0, 0, 0.45);
+  --shadow-soft: 0 12px 32px rgba(0, 0, 0, 0.28);
+
+  --radius: 20px;
+}
+
+* {
+  /* Aqui eu zero margens e paddings padrão do navegador para ter mais controle no layout */
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+}
+
+body {
+  /* Aqui eu monto o fundo principal do sistema com gradientes para deixar a interface com cara mais moderna */
+  min-height: 100vh;
+  color: var(--text);
+  background:
+    radial-gradient(circle at top left, rgba(59, 130, 246, 0.18), transparent 28%),
+    radial-gradient(circle at bottom right, rgba(29, 78, 216, 0.14), transparent 24%),
+    linear-gradient(135deg, #020817 0%, #071226 45%, #020617 100%);
+}
+
+/* ====== TOPO ====== */
+
+.topbar {
+  /* Aqui eu estilizo a barra superior do sistema */
+  height: 78px;
+  background: rgba(2, 8, 23, 0.72);
+  border-bottom: 1px solid rgba(148, 163, 184, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 22px;
+  position: sticky;
+  top: 0;
+  backdrop-filter: blur(14px);
+  z-index: 20;
+}
+
+.brand {
+  /* Aqui eu organizo o ícone e o texto do topo lado a lado */
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.brand-icon {
+  /* Aqui eu monto a caixa do ícone principal */
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg, var(--blue1), var(--blue2));
+  color: #fff;
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.06),
+    0 10px 28px rgba(59, 130, 246, 0.35);
+}
+
+.brand h1 {
+  /* Aqui eu estilizo o nome do sistema */
+  font-size: 19px;
+  font-weight: 900;
+  letter-spacing: -0.3px;
+  color: #fff;
+  line-height: 1.1;
+}
+
+.brand p {
+  /* Aqui eu estilizo a mensagem de saudação */
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 2px;
+}
+
+/* ====== CONTEÚDO ====== */
+
+.container {
+  /* Aqui eu limito a largura do conteúdo para o layout não ficar espalhado demais */
+  max-width: 1220px;
+  margin: 0 auto;
+  padding: 28px 18px 52px;
+}
+
+.page-title h2 {
+  font-size: 24px;
+  font-weight: 900;
+  letter-spacing: -0.4px;
+  color: #fff;
+}
+
+.page-title p {
+  color: var(--muted);
+  margin-top: 5px;
+  font-size: 13px;
+}
+
+/* ====== CARDS ====== */
+
+.cards {
+  /* Aqui eu organizo os cards em grid */
+  margin-top: 20px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+.card {
+  /* Aqui eu estilizo cada card individualmente */
+  background: linear-gradient(180deg, rgba(30, 41, 59, 0.95), rgba(15, 23, 42, 0.92));
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-soft);
+  border: 1px solid var(--border);
+  padding: 18px 18px 16px;
+  position: relative;
+  overflow: hidden;
+}
+
+.card::before {
+  /* Aqui eu adiciono um brilho suave no fundo do card */
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.06), transparent 35%, transparent 100%);
+  pointer-events: none;
+}
+
+.card-head {
+  /* Aqui eu organizo o título e o ícone do card */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  gap: 12px;
+}
+
+.card-label {
+  font-size: 15px;
+  font-weight: 800;
+  color: #e2e8f0;
+  letter-spacing: 0.3px;
+}
+
+.card-value {
+  /* Aqui eu deixo o valor principal do card com bastante destaque */
+  font-size: 28px;
+  font-weight: 900;
+  letter-spacing: -0.5px;
+  color: #fff;
+  line-height: 1.1;
+}
+
+.card-sub {
+  /* Aqui eu escondo os subtítulos porque no layout final eu não estou usando essa informação */
+  display: none;
+}
+
+.chip {
+  /* Aqui eu crio a caixa dos ícones pequenos dos cards */
+  width: 40px;
+  height: 40px;
+  border-radius: 14px;
+  display: grid;
+  place-items: center;
+  font-weight: 900;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.04);
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.chip.ok {
+  color: var(--green);
+  background: var(--greenBg);
+  border-color: rgba(34, 197, 94, 0.22);
+}
+
+.chip.bad {
+  color: var(--red);
+  background: var(--redBg);
+  border-color: rgba(239, 68, 68, 0.22);
+}
+
+.chip.info {
+  color: var(--cyan);
+  background: var(--cyanBg);
+  border-color: rgba(56, 189, 248, 0.22);
+}
+
+.chip.purple {
+  color: #a78bfa;
+  background: var(--purpleBg);
+  border-color: rgba(139, 92, 246, 0.22);
+}
+
+/* ====== PAINÉIS ====== */
+
+.panel {
+  /* Aqui eu estilizo as caixas maiores do formulário, gráfico e tabela */
+  margin-top: 16px;
+  background: linear-gradient(180deg, rgba(30, 41, 59, 0.94), rgba(15, 23, 42, 0.94));
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border);
+  padding: 20px;
+  position: relative;
+  overflow: hidden;
+}
+
+.panel::before {
+  /* Aqui eu adiciono uma linha de brilho no topo do painel */
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.5), transparent);
+}
+
+.panel-head h3 {
+  font-size: 16px;
+  font-weight: 900;
+  letter-spacing: -0.2px;
+  color: #fff;
+}
+
+.panel-head p {
+  margin-top: 4px;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.panel-head.row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+/* ====== FORMULÁRIO ====== */
+
+.form {
+  /* Aqui eu organizo os campos do formulário em grid */
+  display: grid;
+  grid-template-columns: 1.1fr 2fr 2fr 1fr auto;
+  gap: 12px;
+  margin-top: 16px;
+  align-items: end;
+}
+
+.field label {
+  display: block;
+  font-size: 12px;
+  font-weight: 800;
+  margin-bottom: 6px;
+  color: #e2e8f0;
+}
+
+input,
+select {
+  /* Aqui eu padronizo todos os campos do formulário */
+  width: 100%;
+  height: 46px;
+  border-radius: 14px;
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  outline: none;
+  padding: 0 14px;
+  font-size: 14px;
+  color: #fff;
+  background: rgba(2, 8, 23, 0.82);
+  transition: 0.22s ease;
+}
+
+input::placeholder {
+  color: #64748b;
+}
+
+input:focus,
+select:focus {
+  /* Aqui eu deixo um destaque quando o usuário clica no campo */
+  border-color: rgba(59, 130, 246, 0.65);
+  box-shadow:
+    0 0 0 4px rgba(59, 130, 246, 0.13),
+    0 0 18px rgba(59, 130, 246, 0.18);
+}
+
+/* ====== BOTÕES ====== */
+
+.btn {
+  /* Aqui eu padronizo os botões principais */
+  height: 46px;
+  padding: 0 16px;
+  border-radius: 14px;
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  background: rgba(255, 255, 255, 0.03);
+  color: #fff;
+  cursor: pointer;
+  font-weight: 900;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
+  transition: 0.22s ease;
+}
+
+.btn-icon {
+  font-weight: 900;
+}
+
+.btn.primary {
+  background: linear-gradient(90deg, var(--blue1), var(--blue2));
+  border: none;
+  box-shadow: 0 14px 30px rgba(37, 99, 235, 0.28);
+}
+
+.btn.primary:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.06);
+  box-shadow: 0 18px 36px rgba(37, 99, 235, 0.34);
+}
+
+.btn.primary:active {
+  transform: scale(0.98);
+}
+
+.btn.ghost:hover {
+  background: rgba(59, 130, 246, 0.08);
+  border-color: rgba(59, 130, 246, 0.22);
+}
+
+.link-btn {
+  background: transparent;
+  border: none;
+  color: #60a5fa;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.link-btn:hover {
+  text-decoration: underline;
+}
+
+/* ====== GRÁFICO ====== */
+
+.chart-wrap {
+  /* Aqui eu crio a caixa visual do gráfico */
+  margin-top: 16px;
+  border-radius: 18px;
+  border: 1px solid rgba(148, 163, 184, 0.12);
+  padding: 14px;
+  background: rgba(2, 8, 23, 0.45);
+}
+
+.chart-legend {
+  display: flex;
+  justify-content: center;
+  gap: 18px;
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 10px;
+}
+
+.dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 99px;
+  margin-right: 6px;
+}
+
+.dot.green {
+  background: var(--green);
+}
+
+.dot.red {
+  background: var(--red);
+}
+
+#grafico {
+  /* Aqui eu ajusto brilho e contraste do canvas para combinar melhor com o tema escuro */
+  filter: brightness(0.96) contrast(1.08);
+}
+
+/* ====== TABELAS ====== */
+
+.table-wrap {
+  margin-top: 14px;
+  position: relative;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table th {
+  /* Aqui eu estilizo o cabeçalho da tabela */
+  text-align: left;
+  font-size: 12px;
+  color: #cbd5e1;
+  font-weight: 900;
+  padding: 12px 10px;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.12);
+}
+
+.table td {
+  /* Aqui eu estilizo as células da tabela */
+  padding: 12px 10px;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.08);
+  font-size: 13px;
+  vertical-align: middle;
+  color: #e2e8f0;
+}
+
+.right {
+  text-align: right;
+}
+
+.table th.right,
+.table td.right {
+  /* Aqui eu centralizo as colunas que têm a classe right no layout atual */
+  text-align: center;
+}
+
+.action-btn {
+  /* Aqui eu estilizo o botão de excluir */
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  background: rgba(255, 255, 255, 0.04);
+  color: #fff;
+  border-radius: 12px;
+  padding: 8px 10px;
+  cursor: pointer;
+  font-weight: 900;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.2s ease;
+}
+
+.action-btn:hover {
+  background: rgba(239, 68, 68, 0.1);
+  border-color: rgba(239, 68, 68, 0.24);
+}
+
+.empty {
+  /* Aqui eu estilizo a mensagem que aparece quando não existem transações */
+  margin-top: 10px;
+  padding: 13px;
+  border-radius: 14px;
+  color: var(--muted);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px dashed rgba(148, 163, 184, 0.18);
+  font-size: 13px;
+  display: none;
+}
+
+/* ====== MODAL DE TODAS AS TRANSAÇÕES ====== */
+
+.modal-overlay {
+  /* Aqui eu crio o fundo escuro do modal */
+  position: fixed;
+  inset: 0;
+  background: rgba(2, 8, 23, 0.72);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 18px;
+  z-index: 50;
+  backdrop-filter: blur(8px);
+}
+
+.modal {
+  /* Aqui eu estilizo a caixa principal do modal */
+  width: min(1000px, 96vw);
+  background: linear-gradient(180deg, rgba(30, 41, 59, 0.98), rgba(15, 23, 42, 0.98));
+  border-radius: 22px;
+  box-shadow: var(--shadow);
+  border: 1px solid rgba(148, 163, 184, 0.12);
+  padding: 18px;
+}
+
+.modal-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.hidden {
+  /* Aqui eu uso uma classe utilitária simples para esconder elementos */
+  display: none;
+}
+
+/* ====== MODAL DE SALDO INICIAL ====== */
+
+.modal-saldo {
+  /* Aqui eu estilizo o fundo do modal que pede o saldo inicial */
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.72);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+  padding: 16px;
+}
+
+.modal-box {
+  /* Aqui eu estilizo a caixa principal do saldo inicial */
+  width: min(360px, 92vw);
+  background: #0f172a;
+  color: white;
+  padding: 28px;
+  border-radius: 18px;
+  text-align: center;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(148, 163, 184, 0.14);
+}
+
+.modal-box h2 {
+  font-size: 22px;
+  margin-bottom: 8px;
+}
+
+.modal-box p {
+  color: #94a3b8;
+  margin-bottom: 16px;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.modal-box input {
+  width: 100%;
+  height: 44px;
+  border-radius: 10px;
+  border: 1px solid #334155;
+  background: #020617;
+  color: #fff;
+  padding: 0 12px;
+  margin: 0 0 12px 0;
+}
+
+.modal-box button {
+  width: 100%;
+  height: 44px;
+  background: #3b82f6;
+  border: none;
+  border-radius: 10px;
+  color: white;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.modal-box button:hover {
+  filter: brightness(1.06);
+}
+
+/* ====== RESPONSIVIDADE ====== */
+
+@media (max-width: 1050px) {
+  /* Aqui eu adapto os cards e o formulário para telas médias */
+  .cards {
+    grid-template-columns: repeat(2, 1fr);
   }
-  
-  *{ margin:0; padding:0; box-sizing:border-box; font-family:system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif; }
-  body{
-    min-height:100vh;
-    background: linear-gradient(135deg, var(--bg1), var(--bg2));
-    color: var(--text);
+
+  .form {
+    grid-template-columns: 1fr 1fr;
   }
-  
-  .topbar{
-    height: 76px;
-    background: rgba(255,255,255,0.85);
-    border-bottom: 1px solid rgba(226,232,240,0.85);
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    padding: 0 22px;
-    position: sticky;
-    top: 0;
-    backdrop-filter: blur(8px);
-    z-index: 10;
+
+  .btn.primary {
+    width: 100%;
   }
-  
-  .brand{
-    display:flex;
-    gap: 12px;
-    align-items:center;
+}
+
+@media (max-width: 560px) {
+  /* Aqui eu adapto o sistema para telas pequenas */
+  .cards {
+    grid-template-columns: 1fr;
   }
-  
-  .brand-icon{
-    width:42px; height:42px;
-    border-radius: 14px;
-    display:grid; place-items:center;
-    background: linear-gradient(135deg, var(--purple2), var(--purple1));
-    color: #fff;
-    box-shadow: 0 14px 26px rgba(109,40,217,0.25);
+
+  .topbar {
+    height: auto;
+    padding: 12px 14px;
   }
-  
-  .brand h1{ font-size: 18px; font-weight: 900; letter-spacing: -0.2px; }
-  .brand p{ font-size: 12px; color: var(--muted); margin-top: -2px; }
-  
-  .container{
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 26px 18px 46px;
-  }
-  
-  .page-title h2{
-    font-size: 22px;
-    font-weight: 900;
-    letter-spacing: -0.2px;
-  }
-  .page-title p{
-    color: var(--muted);
-    margin-top: 4px;
-    font-size: 13px;
-  }
-  
-  .cards{
-    margin-top: 18px;
-    display:grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 14px;
-  }
-  
-  .card{
-    background: var(--white);
-    border-radius: var(--radius);
-    box-shadow: var(--shadow2);
-    border: 1px solid rgba(226,232,240,0.8);
-    padding: 16px 16px 14px;
-  }
-  
-  .card-head{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    margin-bottom: 10px;
-  }
-  
-  .card-label{
-    font-size: 13px;
-    color: #334155;
-    font-weight: 800;
-  }
-  
-  .card-value{
-    font-size: 28px;
-    font-weight: 900;
-    letter-spacing: -0.3px;
-  }
-  
-  .card-sub{
-    margin-top: 6px;
-    font-size: 12px;
-    color: var(--muted);
-  }
-  
-  .card-sub.ok{ color: var(--green); }
-  .card-sub.bad{ color: var(--red); }
-  
-  .chip{
-    width: 38px; height: 38px;
-    border-radius: 14px;
-    display:grid; place-items:center;
-    font-weight: 900;
-    border: 1px solid rgba(226,232,240,0.8);
-    background: #f8fafc;
-  }
-  
-  .chip.ok{ color: var(--green); background: rgba(22,163,74,0.08); border-color: rgba(22,163,74,0.18); }
-  .chip.bad{ color: var(--red); background: rgba(239,68,68,0.08); border-color: rgba(239,68,68,0.18); }
-  .chip.info{ color: var(--blue); background: rgba(37,99,235,0.08); border-color: rgba(37,99,235,0.18); }
-  .chip.purple{ color: var(--purple2); background: rgba(124,58,237,0.08); border-color: rgba(124,58,237,0.18); }
-  
-  .panel{
-    margin-top: 14px;
-    background: var(--white);
-    border-radius: var(--radius);
-    box-shadow: var(--shadow2);
-    border: 1px solid rgba(226,232,240,0.8);
-    padding: 18px;
-  }
-  
-  .panel-head h3{
+
+  .brand h1 {
     font-size: 16px;
-    font-weight: 900;
-    letter-spacing: -0.2px;
   }
-  .panel-head p{
-    margin-top: 4px;
-    font-size: 12px;
-    color: var(--muted);
+
+  .container {
+    padding: 20px 14px 40px;
   }
-  .panel-head.row{
-    display:flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 12px;
+
+  .panel,
+  .card {
+    border-radius: 18px;
   }
-  
-  .form{
-    display:grid;
-    grid-template-columns: 1.1fr 2fr 2fr 1fr auto;
-    gap: 12px;
-    margin-top: 14px;
-    align-items: end;
+
+  .panel-head.row {
+    flex-direction: column;
+    align-items: flex-start;
   }
-  
-  .field label{
-    display:block;
-    font-size: 12px;
-    font-weight: 800;
-    margin-bottom: 6px;
-    color: #111827;
+
+  .table-wrap {
+    overflow-x: auto;
   }
-  
-  input, select{
-    width: 100%;
-    height: 44px;
-    border-radius: 12px;
-    border: 1px solid var(--border);
-    outline: none;
-    padding: 0 12px;
-    font-size: 14px;
-    background: #fff;
-    transition: 0.2s;
-  }
-  
-  input:focus, select:focus{
-    border-color: rgba(124,58,237,0.55);
-    box-shadow: 0 0 0 4px rgba(124,58,237,0.12);
-  }
-  
-  .btn{
-    height: 44px;
-    padding: 0 14px;
-    border-radius: 14px;
-    border: 1px solid rgba(226,232,240,0.9);
-    background: #fff;
-    cursor:pointer;
-    font-weight: 900;
-    display:flex;
-    gap: 8px;
-    align-items:center;
-    justify-content:center;
-    transition: 0.2s;
-  }
-  
-  .btn-icon{ font-weight: 900; }
-  
-  .btn.primary{
-    border: none;
-    color: #fff;
-    background: linear-gradient(90deg, var(--purple2), var(--purple1));
-    box-shadow: 0 16px 32px rgba(109,40,217,0.22);
-  }
-  
-  .btn.primary:hover{ transform: translateY(-1px); filter: brightness(1.04); }
-  .btn.primary:active{ transform: scale(0.98); }
-  
-  .btn.ghost{
-    background: #fff;
-  }
-  .btn.ghost:hover{
-    background: rgba(124,58,237,0.06);
-    border-color: rgba(124,58,237,0.18);
-  }
-  
-  .link-btn{
-    border: none;
-    background: transparent;
-    color: var(--purple2);
-    font-weight: 900;
-    cursor:pointer;
-  }
-  .link-btn:hover{ text-decoration: underline; }
-  
-  .chart-wrap{
-    margin-top: 14px;
-    border-radius: 16px;
-    border: 1px solid rgba(226,232,240,0.85);
-    padding: 12px;
-    background: #fff;
-  }
-  
-  .chart-legend{
-    display:flex;
-    justify-content:center;
-    gap: 16px;
-    font-size: 12px;
-    color: var(--muted);
-    margin-top: 8px;
-  }
-  
-  .dot{
-    display:inline-block;
-    width: 10px;
-    height: 10px;
-    border-radius: 99px;
-    margin-right: 6px;
-  }
-  .dot.green{ background: var(--green); }
-  .dot.red{ background: var(--red); }
-  
-  .table-wrap{
-    margin-top: 14px;
-    position: relative;
-  }
-  
-  .table{
-    width: 100%;
-    border-collapse: collapse;
-  }
-  
-  .table th{
-    text-align:left;
-    font-size: 12px;
-    color: #334155;
-    font-weight: 900;
-    padding: 12px 10px;
-    border-bottom: 1px solid rgba(226,232,240,0.9);
-  }
-  
-  .table td{
-    padding: 12px 10px;
-    border-bottom: 1px solid rgba(226,232,240,0.7);
-    font-size: 13px;
-    vertical-align: middle;
-  }
-  
-  .right{ text-align:right; }
-  
-  .badge{
-    display:inline-flex;
-    align-items:center;
-    padding: 4px 10px;
-    border-radius: 999px;
-    font-size: 12px;
-    font-weight: 900;
-    background: rgba(15, 23, 42, 0.05);
-    border: 1px solid rgba(226,232,240,0.8);
-  }
-  
-  .money.ok{ color: var(--green); font-weight: 900; }
-  .money.bad{ color: var(--red); font-weight: 900; }
-  
-  .action-btn{
-    border: 1px solid rgba(226,232,240,0.9);
-    background: #fff;
-    border-radius: 12px;
-    padding: 8px 10px;
-    cursor:pointer;
-    font-weight: 900;
-  }
-  .action-btn:hover{
-    background: rgba(239,68,68,0.06);
-    border-color: rgba(239,68,68,0.18);
-  }
-  
-  .editable{
-    cursor: text;
-    border-radius: 10px;
-    padding: 6px 8px;
-  }
-  .editable:hover{
-    background: rgba(124,58,237,0.06);
-  }
-  
-  .empty{
-    margin-top: 10px;
-    padding: 12px;
-    border-radius: 14px;
-    color: var(--muted);
-    background: rgba(15,23,42,0.03);
-    border: 1px dashed rgba(226,232,240,0.95);
-    font-size: 13px;
-    display:none;
-  }
-  
-  .modal-overlay{
-    position: fixed;
-    inset: 0;
-    background: rgba(15, 23, 42, 0.45);
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    padding: 18px;
-    z-index: 50;
-  }
-  
-  .modal{
-    width: min(1000px, 96vw);
-    background: #fff;
-    border-radius: 20px;
-    box-shadow: var(--shadow);
-    border: 1px solid rgba(226,232,240,0.8);
-    padding: 18px;
-  }
-  
-  .modal-head{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap: 12px;
-  }
-  
-  .hidden{ display:none; }
-  
-  @media (max-width: 1050px){
-    .cards{ grid-template-columns: repeat(2, 1fr); }
-    .form{ grid-template-columns: 1fr 1fr; }
-    .btn.primary{ width: 100%; }
-  }
-  @media (max-width: 560px){
-    .cards{ grid-template-columns: 1fr; }
-    .topbar{ height: auto; padding: 12px 14px; }
-    .brand h1{ font-size: 16px; }
-  }
-  
+}
