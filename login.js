@@ -1,3 +1,5 @@
+
+
 // ============ CONFIG ============
 const CHAVE_USUARIOS = "usuarios";
 const CHAVE_SESSAO = "usuarioLogado";
@@ -80,3 +82,4 @@ form.addEventListener("submit", function (e) {
     window.location.href = PAGINA_DASHBOARD;
   }, 800);
 });
+

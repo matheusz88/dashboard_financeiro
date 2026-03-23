@@ -1,0 +1,26 @@
+{
+  "name": "dashboard_financeiro",
+  "version": "1.0.0",
+  "description": "",
+  "homepage": "https://github.com/matheusz88/dashboard_financeiro#readme",
+  "bugs": {
+    "url": "https://github.com/matheusz88/dashboard_financeiro/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/matheusz88/dashboard_financeiro.git"
+  },
+  "license": "ISC",
+  "author": "",
+  "type": "commonjs",
+  "main": "cadastro.js",
+  "scripts": {
+    "test": "jest",
+    "test:coverage": "jest --coverage",
+    "test:verbose": "jest --verbose,",
+    "test:watch": "jest --watch"
+  },
+  "dependencies": {
+    "jest": "^30.3.0"
+  }
+}

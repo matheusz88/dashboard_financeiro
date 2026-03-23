@@ -640,3 +640,7 @@ renderTudo();
 setInterval(() => {
   renderTudo();
 }, 60000);
+
+module.exports = {
+  calcularReceita
+};
